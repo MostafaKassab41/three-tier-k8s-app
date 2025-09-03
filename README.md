@@ -35,6 +35,7 @@ This project demonstrates how to **containerize applications**, manage them with
 
 ## 📂 Project Structure
 
+```
 Application-Code/
 │    ├── backend/
 │    ├── frontend/
@@ -50,6 +51,7 @@ Application-Code/
 │ 
 ├── k8s_manual_Test/ # Raw Kubernetes YAMLs for testing (if not using Helm)
 └── README.md
+```
 
 
 ---

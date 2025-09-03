@@ -1,0 +1,78 @@
+# Node.js dependencies
+application-code/frontend/node_modules/
+application-code/backend/node_modules/
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build artifacts
+dist/
+build/
+.tmp/
+
+# Build outputs
+application-code/frontend/build/
+application-code/backend/dist/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+log.txt
+
+# Environment files (don't leak secrets)
+*.env
+application-code/.env
+application-code/backend/.env
+application-code/frontend/.env
+
+# Docker
+*.pid
+*.seed
+*.bak
+*.tmp
+
+# Ignore docker image tar files
+*.tar
+
+# Security scan reports
+security/*.html
+security/*.json
+security/*.xml
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/crash.log
+infra/terraform/terraform.tfvars
+
+# Ansible
+infra/ansible/*.retry
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Mac / Linux / Windows system files
+.DS_Store
+Thumbs.db
+
+# Security scan results
+security/trivy/*.json
+security/trivy/*.html
+security/owasp/*.xml
+security/kube-bench/*.json
+
+# Helm
+infra/k8s/helm-charts/**/charts/
+infra/k8s/helm-charts/**/tmpcharts/
+
+
+
+
+notes
