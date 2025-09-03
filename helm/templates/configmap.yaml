@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+  namespace: {{ .Values.global.namespace | default "default" }}
+data:
+
+
+# BACKEND ENVIRONMENT VARIABLES
+
+  USE_DB_AUTH: "true"
+  MONGO_CONN_STR: "mongodb://{{ .Release.Name }}-db-svc:{{ .Values.db.service.port }}/myapp?authSource=admin"
+  PORT_backend: {{ .Values.backend.service.port | quote }}
+
+
+# FRONTEND ENVIRONMENT VARIABLES
+
+  REACT_APP_BACKEND_URL: "http://{{ .Values.backend.service.host }}/api/tasks"
+  PORT_frontend: {{ .Values.frontend.service.port | quote }}
+
+
+# MONGO ENVIRONMENT VARIABLES
+
+  

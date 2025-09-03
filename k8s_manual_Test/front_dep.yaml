@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata: 
+  name: test-frontend
+  namespace: test
+  labels:
+    role: frontend
+    env: test
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: frontend
+      env: test
+  template:
+    metadata:
+      labels:
+        role: frontend
+        env: test
+
+    spec:
+      containers:
+        - name: frontend
+          image: my-todo-frontend:mod2
+          ports:
+            - containerPort: 9999
+          env:
+            - name: REACT_APP_BACKEND_URL
+              # value: http://backend:3500/api/tasks
+              value: http://192.168.49.2:30001/api/tasks
+            - name: PORT
+              value: "9999"
+
+          # resources:
+          #   requests:
+          #     cpu: "100m"
+          #     memory: "128Mi"
+          #   limits:
+          #     cpu: "200m"
+          #     memory: "256Mi"
+              

@@ -1,0 +1,63 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ingress
+  namespace: {{ .Values.global.namespace | default "default" }}
+  # annotations:
+  #   kubernetes.io/ingress.class: "nginx"
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:     # without host >> works with the cluster IP
+        paths:
+
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-frontend-svc
+                port:
+                  number: {{ .Values.frontend.service.port }}
+
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-backend-svc
+                port:
+                  number: {{ .Values.backend.service.port }}
+          - path: /ok
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-backend-svc
+                port:
+                  number: {{ .Values.backend.service.port }}
+
+
+
+    # Assign vertual subdomain for every frontend and backend 
+    # Note: use > echo "$(minikube ip) app.devops-todo.com api.devops-todo.com" | sudo tee -a /etc/hosts
+
+    - host: {{ .Values.frontend.service.host | default "app.devops-todo.com" }}   # Add this host to your /etc/hosts infront of the cluster IP ^^^^
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-frontend-svc
+                port:
+                  number: {{ .Values.frontend.service.port }}
+    
+    - host: {{ .Values.backend.service.host | default "api.devops-todo.com" }}   # Add this host to your /etc/hosts infront of the cluster IP
+      http:
+        paths:
+          - path: /
+            pathType: Prefix 
+            backend:
+              service:
+                name: {{ .Release.Name }}-backend-svc
+                port:
+                  number: {{ .Values.backend.service.port }}
+            

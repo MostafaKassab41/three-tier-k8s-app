@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata: 
+  name: test-backend
+  namespace: test
+  labels:
+    role: backend
+    env: test
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: backend
+      env: test
+  template:
+    metadata:
+      labels:
+        role: backend
+        env: test
+
+    spec:
+      containers:
+        - name: backend
+          image: my-todo-backend:mod2
+          ports:
+            - containerPort: 3500
+
+          env:   
+          - name: USE_DB_AUTH
+            value: "true"                              
+          # - name: MONGO_CONN_STR
+          #   value: "mongodb://admin:password@10.98.145.154:27017/myapp?authSource=admin"
+          - name: MONGO_CONN_STR
+            value: "mongodb://admin:password@mongodb:27017/myapp?authSource=admin"
+
+          # - name: MONGO_CONN_STR
+          #   value: "mongodb://mongodb:27017/myapp?authSource=admin"
+
+          - name: MONGO_USERNAME
+            value: "admin"
+          - name: MONGO_PASSWORD
+            value: "password"
+          - name: PORT
+            value: "3500"
+
+          livenessProbe:                           # Health check (restart if dead)
+            httpGet:
+              path: /ok
+              port: 3500
+
+          readinessProbe:                          # Health check (ready if alive)
+            httpGet:
+              path: /ok
+              port: 3500
+              

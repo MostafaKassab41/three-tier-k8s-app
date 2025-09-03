@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:4.4
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: my-todo-backend:mod2
+    container_name: backend
+    restart: always
+    depends_on:
+      - mongo
+    ports:
+      - "3500:3500"
+    environment:
+      PORT: 3500
+      USE_DB_AUTH: "true"
+      MONGO_CONN_STR: mongodb://admin:password@mongo:27017/myapp?authSource=admin
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: password
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    image: my-todo-frontend:mod2
+    container_name: frontend
+    restart: always
+    environment:
+      REACT_APP_BACKEND_URL: http://localhost:3500/api/tasks
+      PORT: 8080
+    depends_on:
+      - backend
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+volumes:
+  mongo_data:
+
+networks:
+  app-network:
+    driver: bridge

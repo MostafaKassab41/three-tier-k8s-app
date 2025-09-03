@@ -1,0 +1,16 @@
+# This pod for testing internal network connection inside the cluster (USED FOR TROUBLESHOOTING)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-utils
+  labels:
+    app: test-utils
+spec:
+  containers:
+  - name: network-tools
+    # image: curlimages/curl:latest 
+    image: nicolaka/netshoot:latest   # This IMG contain most network testing tools
+    command: ["sleep", "infinity"] # Keep the pod running forever
+
+
+# kubectl run netshoot --rm -it --image=nicolaka/netshoot -- /bin/bash

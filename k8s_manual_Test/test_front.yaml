@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: frontend-test-pod
+  labels:
+    app: frontend-test # <- This label is used by the service to find the pod
+    
+spec:
+  containers:
+  - name: frontend
+    image: my-todo-frontend:mod2 # <-- YOUR IMAGE HERE
+    ports:
+    - containerPort: 8080 # <-- The port your app listens on INSIDE the container
+    env:
+        - name: PORT
+          value: "8080"
+    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-test-service
+spec:
+  type: NodePort # <- This makes it accessible from your host machine
+  selector:
+    app: frontend-test # <- Must match the pod's label
+  ports:
+    - protocol: TCP
+      port: 80           # Port the Service listens on
+      targetPort: 8080   # Port to forward to the Pod (matches containerPort)
+      nodePort: 30000  # Optional: specify a port between 30000-32767

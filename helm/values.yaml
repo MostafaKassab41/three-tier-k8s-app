@@ -1,0 +1,73 @@
+global:
+  namespace: "test"
+
+# ------------------------------------------------------------------
+frontend:
+  replicaCount: 1
+  image:
+    repository: "my-todo-frontend"
+    tag: "mod2"
+    pullPolicy: IfNotPresent
+
+  service:
+    type: NodePort
+    port: 3500
+    NodePort: 30002
+    host: app.devops-todo.com
+
+  resources:
+    limits:
+      cpu: "800m"
+      memory: "812Mi"
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+  
+# ------------------------------------------------------------------
+backend:
+  replicaCount: 1
+  image:
+    repository: "my-todo-backend"
+    tag: "mod2"
+    pullPolicy: IfNotPresent
+
+  service:
+    type: NodePort
+    port: 3500
+    NodePort: 30001
+    host: api.devops-todo.com
+
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+    requests:
+      cpu: "250m"
+      memory: "256Mi"
+
+# ------------------------------------------------------------------
+db:
+  replicaCount: 1
+  image:
+    repository: "mongo"
+    tag: "4.4"
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 27017
+
+  persistence:
+    enabled: true
+    name: "test" 
+    size: "1Gi"
+    
+  resources:
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+    requests:
+      cpu: "500m"
+      memory: "512Mi"
+
+# ------------------------------------------------------------------
